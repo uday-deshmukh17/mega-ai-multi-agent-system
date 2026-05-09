@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+
+  api:
+    build: .
+
+    container_name: mega_ai_api
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    depends_on:
+      - db
+
+    env_file:
+      - .env
+
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  db:
+    image: pgvector/pgvector:pg16
+
+    container_name: mega_ai_db
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mega_ai
+
+    ports:
+      - "5432:5432"
