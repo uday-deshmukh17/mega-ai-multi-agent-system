@@ -372,6 +372,29 @@ This demonstrates:
 - autonomous feedback loops
 - production-inspired AI monitoring
 
+## Evaluation Metrics ##
+
+The evaluation harness tracks lightweight orchestration and retrieval metrics including:
+
+- retrieval relevance scores
+- critique confidence scores
+- benchmark pass/fail status
+- hallucination fallback detection
+- token budget utilization
+- adversarial robustness behavior
+
+The evaluator helps identify retrieval weaknesses, unsupported queries, and orchestration failure modes.
+
+## Reproducibility ##
+
+The project is fully containerized using Docker and can be reproduced consistently across environments using:
+
+```bash
+docker compose up --build
+```
+
+Environment configuration is managed through `.env` variables.
+
 ## Adversarial Robustness Testing ##
 
 The system includes adversarial evaluation scenarios to test:
