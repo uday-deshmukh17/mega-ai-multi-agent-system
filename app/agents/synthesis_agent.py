@@ -14,7 +14,17 @@ class SynthesisAgent:
             context.retrieved_chunks
         )
 
-        context.final_answer = response["answer"]
+        sources = []
+
+        for chunk in context.retrieved_chunks:
+
+            sources.append(chunk["topic"])
+
+        context.final_answer = {
+            "answer": response["answer"],
+            "sources": sources,
+            "source_type": response["source_type"]
+        }
 
         log = create_log(
             agent="synthesis_agent",
@@ -22,7 +32,8 @@ class SynthesisAgent:
             status="success",
             details={
                 "llm_used": os.getenv("MODEL_NAME"),
-                "source_type": response["source_type"]
+                "source_type": response["source_type"],
+                "sources_used": sources
             }
         )
 

@@ -16,8 +16,9 @@ class ContextManager:
         )
 
         used_tokens += self.calculate_tokens(
-            context.final_answer
+            context.final_answer["answer"]
         )
+            
 
         remaining = (
             context.token_budget

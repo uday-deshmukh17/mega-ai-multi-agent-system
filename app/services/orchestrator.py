@@ -2,65 +2,48 @@ from app.agents.decomposition_agent import DecompositionAgent
 from app.agents.rag_agent import RAGAgent
 from app.agents.critique_agent import CritiqueAgent
 from app.agents.synthesis_agent import SynthesisAgent
-from app.agents.compression_agent import CompressionAgent
 
 from app.services.context_manager import ContextManager
-from app.services.router import Router
 
 
 class Orchestrator:
 
+    def __init__(self):
+
+        self.decomposition_agent = DecompositionAgent()
+
+        self.rag_agent = RAGAgent()
+
+        self.critique_agent = CritiqueAgent()
+
+        self.synthesis_agent = SynthesisAgent()
+
+        self.context_manager = ContextManager()
+
     async def run(self, context):
 
-        decomposition_agent = DecompositionAgent()
-
-        rag_agent = RAGAgent()
-
-        critique_agent = CritiqueAgent()
-
-        synthesis_agent = SynthesisAgent()
-
-        compression_agent = CompressionAgent()
-
-        context_manager = ContextManager()
-
-        router = Router()
-
-        selected_agents = router.determine_agents(
-            context.user_query
+        # Step 1 — Task decomposition
+        context = await self.decomposition_agent.run(
+            context
         )
 
-        if "decomposition" in selected_agents:
+        # Step 2 — RAG retrieval
+        context = await self.rag_agent.run(
+            context
+        )
 
-            context = await decomposition_agent.run(
-                context
-            )
+        # Step 3 — Critique / validation
+        context = await self.critique_agent.run(
+            context
+        )
 
-        if "rag" in selected_agents:
+        # Step 4 — Final synthesis
+        context = await self.synthesis_agent.run(
+            context
+        )
 
-            context = await rag_agent.run(
-                context
-            )
-
-        if "critique" in selected_agents:
-
-            context = await critique_agent.run(
-                context
-            )
-
-        if "synthesis" in selected_agents:
-
-            context = await synthesis_agent.run(
-                context
-            )
-
-        if "compression" in selected_agents:
-
-            context = await compression_agent.run(
-                context
-            )
-
-        budget_status = context_manager.check_budget(
+        # Step 5 — Token budget management
+        budget_status = self.context_manager.check_budget(
             context
         )
 

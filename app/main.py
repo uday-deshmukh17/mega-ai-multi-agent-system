@@ -12,11 +12,14 @@ from app.models.log import Log
 from app.db.database import Base
 
 from app.schemas.context import SharedContext
+
 from app.services.orchestrator import Orchestrator
 
 from app.core.job_store import JOB_STORE
 
 from app.agents.meta_agent import MetaAgent
+
+from app.evals.adversarial_tests import ADVERSARIAL_TESTS
 
 Base.metadata.create_all(bind=engine)
 
@@ -121,3 +124,35 @@ async def meta_review():
     review = await meta_agent.run(results)
 
     return review
+
+@app.get("/adversarial-test")
+
+async def adversarial_test():
+
+    orchestrator = Orchestrator()
+
+    results = []
+
+    for test in ADVERSARIAL_TESTS:
+
+        context = SharedContext(
+            job_id="adversarial-test",
+            user_query=test["query"]
+        )
+
+        context = await orchestrator.run(context)
+
+        results.append({
+            "test_id": test["id"],
+            "query": test["query"],
+            "source_type":
+            context.final_answer["source_type"],
+
+            "answer":
+            context.final_answer["answer"]
+        })
+
+    return {
+        "total_tests": len(results),
+        "results": results
+    }
