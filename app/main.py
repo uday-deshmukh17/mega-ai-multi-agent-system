@@ -29,7 +29,7 @@ app = FastAPI()
 async def root():
 
     return {
-        "message": "Mega AI Multi-Agent System Running"
+        "message": "Real Time Multi AI-Agent System Running"
     }
 
 @app.post("/query")

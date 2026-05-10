@@ -17,7 +17,7 @@ class Evaluator:
 
             passed = (
                 test["expected_keyword"].lower()
-                in context.final_answer.lower()
+                in context.final_answer["answer"].lower()
             )
 
             results.append({

@@ -1,4 +1,4 @@
- # Mega AI Multi-Agent Orchestration System #
+ # Real Time Multi-Agent Orchestration And Evaluation System #
 
 A production-inspired Multi-Agent AI Backend System built using FastAPI, LLM orchestration, Retrieval-Augmented Generation (RAG), streaming pipelines, evaluation harnesses, meta-agents, Docker, and PostgreSQL.
 
@@ -38,6 +38,32 @@ docker compose up --build
 
 6. Open Swagger Docs
 (https://improved-space-spork-7v4r4vxgv66jcxp5-8000.app.github.dev/docs)
+
+## Setup Instructions ##
+
+1. Clone Repository
+git clone <repo-url>
+cd mega-ai-multi-agent-system
+
+2. Create Environment File
+Create:
+.env
+
+3. Install Dependencies
+pip install -r requirements.txt
+
+4. Run Docker Containers
+docker compose up --build
+
+5. Open Swagger Docs
+(https://improved-space-spork-7v4r4vxgv66jcxp5-8000.app.github.dev/docs)
+
+6. You can test endpoints directly using:
+
+- Click an endpoint
+- Click ** Try it out ##
+- Provide request payload
+- Click ## Execute ##
 
 ## Project Objective ##
 
@@ -121,7 +147,7 @@ app/
 │
 ├── evals/
 │   ├── __init__.py
-│   ├── adversarial_tests.py
+    |   adversarial_test.py
 │   ├── evaluator.py
 │   └── test_cases.py
 │
@@ -464,6 +490,10 @@ The project is fully containerized.
         docker compose up --build
 - Stop Project
         docker compose down
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 528257e (Final stable AI orchestration)
 
 ## API Endpoints ##
 
