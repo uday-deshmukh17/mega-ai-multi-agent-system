@@ -12,6 +12,32 @@ This project demonstrates how modern AI systems can combine:
 - Streaming observability
 - Token/context management
 - Real-time inference
+- Adversarial robustness testing
+
+
+## Setup Instructions ##
+
+1. Clone Repository
+git clone <repo-url>
+cd mega-ai-multi-agent-system
+
+2. Create Environment File
+Create:
+.env
+Add:
+```env
+GROQ_API_KEY=your_api_key
+MODEL_NAME=llama-3.3-70b-versatile
+```
+
+4. Install Dependencies
+pip install -r requirements.txt
+
+5. Run Docker Containers
+docker compose up --build
+
+6. Open Swagger Docs
+(https://improved-space-spork-7v4r4vxgv66jcxp5-8000.app.github.dev/docs)
 
 ## Project Objective ##
 
@@ -25,12 +51,12 @@ The objective of this project is to build a real-time AI orchestration system ca
 - Evaluating benchmark performance
 - Performing automated meta-review analysis
 - Streaming live orchestration events
+- Testing adversarial robustness scenarios
 
 This architecture simulates how enterprise-grade AI systems operate internally.
 
 ## System Architecture ##
 High-Level Flow
-
 ```text
 User Query
     ↓
@@ -52,6 +78,8 @@ Context Manager
     ↓
 Final Response
 ```
+
+---
  ## Tech Stack ##
  
 | Technology | Purpose |
@@ -72,44 +100,63 @@ Final Response
 ```text
 app/
 ├── agents/
-│   ├── decomposition_agent.py
-│   ├── rag_agent.py
-│   ├── critique_agent.py
+│   ├── __init__.py
 │   ├── compression_agent.py
-│   ├── synthesis_agent.py
-│   └── meta_agent.py
+│   ├── critique_agent.py
+│   ├── decomposition_agent.py
+│   ├── meta_agent.py
+│   ├── rag_agent.py
+│   └── synthesis_agent.py
 │
-├── services/
-│   ├── orchestrator.py
-│   ├── llm_service.py
-│   ├── context_manager.py
-│   ├── tool_manager.py
-│   └── router.py
-│
-├── tools/
-│   ├── web_search_tool.py
-│   └── python_tool.py
+├── api/
+│   └── __init__.py
 │
 ├── core/
-│   ├── knowledge_base.py
-│   └── config.py
+│   ├── job_store.py
+│   └── knowledge_base.py
 │
 ├── db/
-│   ├── database.py
-│   └── models.py
+│   ├── __init__.py
+│   └── database.py
 │
 ├── evals/
+│   ├── __init__.py
+│   ├── adversarial_tests.py
 │   ├── evaluator.py
 │   └── test_cases.py
 │
-├── schemas/
-├── utils/
-├── main.py
+├── models/
+│   ├── __init__.py
+│   └── log.py
 │
-Dockerfile
+├── schemas/
+│   ├── context.py
+│   └── tool_response.py
+│
+├── services/
+│   ├── __init__.py
+│   ├── context_manager.py
+│   ├── llm_service.py
+│   ├── orchestrator.py
+│   ├── router.py
+│   └── tool_manager.py
+│
+├── tools/
+│   ├── python_tool.py
+│   └── web_search_tool.py
+│
+├── utils/
+│   └── logger.py
+│
+├── __init__.py
+└── main.py
+
+.env
+.gitignore
 docker-compose.yml
-requirements.txt
+Dockerfile
 README.md
+requirements.txt
 ```
 
 
@@ -163,25 +210,34 @@ Maintains context efficiency.
 
 5. Synthesis Agent -
 
-Purpose:
+Synthesis Agent
+
+### Purpose
 
 Calls the LLM.
+
 Generates final natural-language responses.
+
 Uses grounded retrieval context whenever available.
 
-The system supports:
-
-Grounded Generation
+### Grounded Generation
 
 If retrieval exists:
 
-LLM prioritizes knowledge-base context.
-General LLM Fallback
+```json
+"source_type": "knowledge_base"
+```
+
+LLM prioritizes internal knowledge-base context.
+
+### General LLM Fallback
 
 If retrieval does not exist:
 
-System transparently switches to general LLM reasoning.
-Response clearly states that no internal KB context was available.
+```json
+"source_type": "general_llm"
+```
+The system transparently switches to general LLM reasoning while informing the user that no internal knowledge-base context was available.
 
 This creates a balanced Hybrid RAG + LLM architecture.
 
@@ -223,28 +279,34 @@ This improves:
 
 ## Hybrid AI Reasoning ##
 
-The system supports two answer modes.
+The system supports two response modes.
 
-Mode 1 — Knowledge Base Grounding
+## Mode 1 — Knowledge Base Grounding
 
 If relevant chunks exist:
 
+```json
 "source_type": "knowledge_base"
+```
 
 The LLM generates grounded responses.
 
-Mode 2 — General LLM Reasoning
+---
+
+## Mode 2 — General LLM Reasoning
 
 If no chunks exist:
 
+```json
 "source_type": "general_llm"
+```
 
 The LLM answers using pretrained general knowledge while transparently disclosing the fallback.
 
-This architecture allows:
+This architecture enables:
 
-- real-time flexibility
 - grounded retrieval
+- real-time flexibility
 - reduced hallucination risk
   
 ## Real-Time Streaming (SSE) ##
@@ -309,6 +371,26 @@ This demonstrates:
 - evaluation-aware orchestration
 - autonomous feedback loops
 - production-inspired AI monitoring
+
+## Adversarial Robustness Testing ##
+
+The system includes adversarial evaluation scenarios to test:
+
+- unsupported/random queries
+- hallucination fallback handling
+- malformed prompts
+- retrieval failure cases
+- prompt injection-style inputs
+
+## Endpoint
+
+```text
+/adversarial-test
+```
+
+This demonstrates robustness testing and failure-mode analysis for production-inspired AI systems.
+
+---
   
 ## Traceability & Observability ##
 
@@ -359,34 +441,17 @@ The project is fully containerized.
         docker compose up --build
 - Stop Project
         docker compose down
-  
-## Setup Instructions ##
-
-1. Clone Repository
-git clone <repo-url>
-cd mega-ai-multi-agent-system
-
-2. Create Environment File
-Create:
-.env
-
-3. Install Dependencies
-pip install -r requirements.txt
-
-4. Run Docker Containers
-docker compose up --build
-
-5. Open Swagger Docs
-(https://improved-space-spork-7v4r4vxgv66jcxp5-8000.app.github.dev/docs)
 
 ## API Endpoints ##
 
-Endpoint	Purpose
-/query	        Main AI orchestration endpoint
-/stream	        Live SSE streaming
-/trace/{job_id}	Trace orchestration logs
-/evaluate	Benchmark testing
-/meta-review	Benchmark failure analysis
+| Endpoint | Purpose |
+|---|---|
+| /query | Main AI orchestration endpoint |
+| /stream | Live SSE streaming |
+| /trace/{job_id} | Trace orchestration logs |
+| /evaluate | Benchmark testing |
+| /meta-review | Benchmark failure analysis |
+| /adversarial-test | Robustness testing |
 
 ## Example Query Flow ##
 
@@ -433,6 +498,8 @@ This creates:
 
 ✅ Meta-Agent Feedback Loop
 
+✅ Adversarial Robustness Testing
+
 ✅ Traceability & Observability
 
 ✅ Dockerized Deployment
@@ -442,6 +509,14 @@ This creates:
 ✅ Token Budget Management
 
 ✅ Production-Inspired AI Architecture
+
+## Current Limitations ##
+
+- Retrieval currently uses lightweight keyword-overlap matching.
+- Semantic vector embeddings are planned as a future improvement.
+- Dynamic runtime routing is partially implemented.
+- Provenance mapping is currently chunk-level rather than sentence-level.
+- Retrieval is not yet embedding/vector-database based.
 
  ## Future Improvements ##
 
