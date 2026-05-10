@@ -1,4 +1,4 @@
- # Real Time Multi-Agent Orchestration And Evaluation System #
+ # Real Time Multi-Agent LLM Orchestration And Evaluation System #
 
 A production-inspired Multi-Agent AI Backend System built using FastAPI, LLM orchestration, Retrieval-Augmented Generation (RAG), streaming pipelines, evaluation harnesses, meta-agents, Docker, and PostgreSQL.
 
@@ -29,25 +29,6 @@ Add:
 GROQ_API_KEY=your_api_key
 MODEL_NAME=llama-3.3-70b-versatile
 ```
-
-4. Install Dependencies
-pip install -r requirements.txt
-
-5. Run Docker Containers
-docker compose up --build
-
-6. Open Swagger Docs
-(https://improved-space-spork-7v4r4vxgv66jcxp5-8000.app.github.dev/docs)
-
-## Setup Instructions ##
-
-1. Clone Repository
-git clone <repo-url>
-cd mega-ai-multi-agent-system
-
-2. Create Environment File
-Create:
-.env
 
 3. Install Dependencies
 pip install -r requirements.txt
@@ -82,13 +63,18 @@ The objective of this project is to build a real-time AI orchestration system ca
 This architecture simulates how enterprise-grade AI systems operate internally.
 
 ## System Architecture ##
+
 High-Level Flow
 ```text
 User Query
     ↓
 FastAPI Endpoint
     ↓
-Orchestrator
+Master Orchestrator
+    ↓
+Shared Context Initialization
+    ↓
+LLM-Powered Multi-Agent Pipeline
     ↓
 Decomposition Agent
     ↓
@@ -102,10 +88,24 @@ Synthesis Agent (LLM)
     ↓
 Context Manager
     ↓
-Final Response
+Final Response + Logs + Trace
 ```
+## LLM Integration ##
 
----
+The system uses Large Language Models (LLMs) for:
+
+- task decomposition
+- retrieval-grounded response synthesis
+- critique and validation
+- fallback reasoning for unsupported queries
+- adversarial robustness evaluation
+
+Current LLM Provider:
+- Groq API
+- Model: `llama-3.3-70b-versatile`
+
+The architecture is modular and allows swapping LLM providers easily.
+
  ## Tech Stack ##
  
 | Technology | Purpose |
