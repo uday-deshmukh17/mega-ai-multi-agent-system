@@ -490,10 +490,7 @@ The project is fully containerized.
         docker compose up --build
 - Stop Project
         docker compose down
-<<<<<<< HEAD
-=======
-  
->>>>>>> 528257e (Final stable AI orchestration)
+
 
 ## API Endpoints ##
 
